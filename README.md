@@ -1,158 +1,120 @@
-# Turbo Start Sanity
+# GuideSite
 
-Turbo Start Sanity is a free, open-source Sanity template: a Next.js page builder
-starter with visual editing, hyper-optimised SEO, and a Turborepo monorepo structure.
-Built by [Roboto Studio](https://robotostudio.com) and used in production client builds.
+GuideSite is a Sanity-powered Next.js site in a Turborepo monorepo.
 
-![Turbo Start Sanity](https://raw.githubusercontent.com/robotostudio/turbo-start-sanity/main/tasteful-safe-option-og.png)
+## What is included
 
-## A bare-metal, nitro-fuelled Sanity template welded in the garage of Roboto Studio. Ready to rip with pagebuilders, hyper-optimised SEO, and a need for speed.
+### Apps
 
-![Engine Divider](https://raw.githubusercontent.com/robotostudio/turbo-start-sanity/main/engine-divider.png)
+- `apps/web`: Next.js frontend
+- `apps/studio`: Sanity Studio
+
+### Packages
+
+- `packages/ui`: shared UI components
+- `packages/sanity`: shared Sanity clients, GROQ queries, live preview utilities, and image helpers
+- `packages/env`: environment variable helpers
+- `packages/logger`: shared logger utility
+- `packages/typescript-config`: shared TypeScript configuration
 
 ## Features
 
-### Monorepo Structure
-
-- Apps: web (Next.js frontend) and studio (Sanity Studio)
-- Shared packages: UI components, TypeScript config, environment utilities, logger
-- Turborepo for build orchestration and caching
-
-### Frontend (Web)
-
 - Next.js App Router with TypeScript
-- Shadcn UI components with Tailwind CSS
-- Server Components and Server Actions
-- SEO optimization with metadata
-- Blog system with rich text editor
-- Table of contents generation
-- Responsive layouts
-
-### Content Management (Studio)
-
 - Sanity Studio v5
-- Custom document types (Blog, FAQ, Pages)
-- Visual editing integration
-- Structured content with schemas
-- Live preview capabilities
-- Asset management
+- Visual editing and live preview support
+- Shadcn UI components with Tailwind CSS
+- Blog, FAQ, page, navigation, footer, and settings schemas
+- Type-safe GROQ queries with generated TypeScript types
+- Turborepo build orchestration and caching
 
-## Getting Started
+## Getting started
 
-### Installing the template
-
-#### 1. Initialize template with Sanity CLI
-
-Run the command in your Terminal to initialize this template on your local computer.
-
-See the documentation if you are [having issues with the CLI](https://www.sanity.io/help/cli-errors).
+### 1. Install dependencies
 
 ```shell
-npm create sanity@latest -- --template robotostudio/turbo-start-sanity
+pnpm install
 ```
 
-#### 2. Run Studio and Next.js app locally
-
-Navigate to the template directory using `cd <your app name>`, and start the development servers by running the following command
+### 2. Run the web app and Studio locally
 
 ```shell
 pnpm run dev
 ```
 
-#### 3. Open the app and sign in to the Studio
+Open the web app at [http://localhost:3000](http://localhost:3000).
 
-Open the Next.js app running locally in your browser on [http://localhost:3000](http://localhost:3000).
+Open the Studio at [http://localhost:3333](http://localhost:3333).
 
-Open the Studio running locally in your browser on [http://localhost:3333](http://localhost:3333). You should now see a screen prompting you to log in to the Studio. Use the same service (Google, GitHub, or email) that you used when you logged in to the CLI.
+## Working with content
 
-### Adding content with Sanity
+### Create content
 
-#### 1. Publish your first document
+The Sanity schema includes `Author`, `Blog`, `BlogIndex`, `FAQ`, `Footer`, `HomePage`, `Navbar`, `Page`, and `Settings` document types.
 
-The template comes pre-defined with a schema containing `Author`, `Blog`, `BlogIndex`, `FAQ`, `Footer`, `HomePage`, `Navbar`, `Page`, and `Settings` document types.
+From the Studio, click "+ Create", choose a document type, then create and publish content. Published content appears in the web app and in the Studio Presentation tool.
 
-From the Studio, click "+ Create" and select the `Blog` document type. Go ahead and create and publish the document.
+### Seed local content
 
-Your content should now appear in your Next.js app ([http://localhost:3000](http://localhost:3000)) as well as in the Studio on the "Presentation" Tab
-
-#### 2. Sample Content
-
-When you initialize the template using the Sanity CLI, sample content is not automatically imported into your project. However, you can import it after the init is done. This data includes example blog posts, authors, and other content types to help you get started quickly (see next step).
-
-#### 3. Seed data using script
-
-To add sample data programmatically, run the following command:
+To import the bundled seed data into the production dataset:
 
 ```shell
 cd apps/studio
 npx sanity dataset import ./seed-data.tar.gz production --replace
 ```
 
-This command imports seed content into your Sanity dataset.
+### Extend the schema
 
-#### 4. Extending the Sanity schema
+Document schemas live in `apps/studio/schemaTypes/documents`.
 
-The schemas for all document types are defined in the `studio/schemaTypes/documents` directory. You can [add more document types](https://www.sanity.io/docs/schema-types) to the schema to suit your needs.
+Shared frontend Sanity utilities live in `packages/sanity`.
 
-### Deploying your application and inviting editors
+## Deployment
 
-#### 1. Deploy Sanity Studio
+### Deploy Sanity Studio
 
-Your Next.js frontend (`/web`) and Sanity Studio (`/studio`) are still only running on your local computer. It's time to deploy and get it into the hands of other content editors.
-
-> **⚠️ Important**: When initializing the template with the Sanity CLI, the `.github` folder may not be included or might be renamed to `github` (without the dot). If you don't see a `.github` folder in your project root, you'll need to manually create it and copy the GitHub Actions workflows from the [template repository](https://github.com/robotostudio/turbo-start-sanity/tree/main/.github) for the deployment automation to work.
-
-The template includes a GitHub Actions workflow [`deploy-sanity.yml`](https://raw.githubusercontent.com/robotostudio/turbo-start-sanity/main/.github/workflows/deploy-sanity.yml) that automatically deploys your Sanity Studio whenever changes are pushed to the `studio` directory.
-
-> **Note**: To use the GitHub Actions workflow, make sure to configure the following secrets in your repository settings:
->
-> - `SANITY_DEPLOY_TOKEN`
-> - `SANITY_STUDIO_PROJECT_ID`
-> - `SANITY_STUDIO_DATASET`
-> - `SANITY_STUDIO_TITLE`
-> - `SANITY_STUDIO_PRESENTATION_URL`
-> - `SANITY_STUDIO_APP_ID`
-
-`SANITY_STUDIO_APP_ID` identifies your deployed Studio application. Run `npx sanity deploy` from `apps/studio` **locally** the first time — Sanity creates the application and gives you its app ID — then set `SANITY_STUDIO_APP_ID` to that value, both locally and in your GitHub repository secrets, so every later deploy targets the same Studio. The GitHub Actions workflow runs non-interactively (`CI: true`) and can't create the app for you, so that first deploy has to happen locally; until the secret is set, the CI deploy will fail. This replaces the deprecated `studioHost` / `*.sanity.studio` hostname setup ([details](https://www.sanity.io/docs/help/studio-host-user-applications)).
-
-Set `SANITY_STUDIO_PRESENTATION_URL` to your web app front-end URL (from the Vercel deployment). This URL is required for production deployments and should be:
-
-- Set in your GitHub repository secrets for CI/CD deployments
-- Set in your local environment if deploying manually with `npx sanity deploy`
-- Not needed for local development, where preview will automatically use `http://localhost:3000`
-
-You can then manually deploy from your Studio directory (`/studio`) using:
+Run the first Studio deploy locally from `apps/studio`:
 
 ```shell
 npx sanity deploy
 ```
 
-**Note**: To use the live preview feature, your browser needs to enable third party cookies.
+Sanity creates the deployed Studio application and returns an app ID. Set that value as `SANITY_STUDIO_APP_ID` locally and in GitHub repository secrets so later CI deploys target the same Studio.
 
-#### 2. Deploy Next.js app to Vercel
+The GitHub Actions workflow in `github/workflows/deploy-sanity.yml` deploys the Studio when changes are pushed to the Studio app.
 
-You have the freedom to deploy your Next.js app to your hosting provider of choice. With Vercel and GitHub being a popular choice, we'll cover the basics of that approach.
+Configure these repository secrets before using CI deploys:
 
-1. Create a GitHub repository from this project. [Learn more](https://docs.github.com/en/migrations/importing-source-code/using-the-command-line-to-import-source-code/adding-locally-hosted-code-to-github).
-2. Create a new Vercel project and connect it to your Github repository.
-3. Set the `Root Directory` to your Next.js app (`/apps/web`).
-4. Configure your Environment Variables.
+- `SANITY_DEPLOY_TOKEN`
+- `SANITY_STUDIO_PROJECT_ID`
+- `SANITY_STUDIO_DATASET`
+- `SANITY_STUDIO_TITLE`
+- `SANITY_STUDIO_PRESENTATION_URL`
+- `SANITY_STUDIO_APP_ID`
 
-#### 3. Configure CORS Origins
+Set `SANITY_STUDIO_PRESENTATION_URL` to the deployed web app URL. Local development uses `http://localhost:3000`.
 
-Your production URLs must be added to your Sanity project's CORS origins, otherwise the frontend will be blocked from fetching content.
+To use live preview, the browser must allow third-party cookies.
 
-1. Go to [Sanity Manage](https://www.sanity.io/manage), select your project, and navigate to **API** > **CORS origins**.
-2. Add the following origins:
-   - Your production URL (e.g. `https://your-app.vercel.app`)
-   - Your custom domain if applicable (e.g. `https://yourdomain.com`)
-   - `http://localhost:3000` (for local development — added by default)
-3. Enable **Allow credentials** for each origin that needs authenticated requests (e.g. live preview, visual editing).
+### Deploy the web app
 
-> **Note**: Vercel preview deployments use unique URLs per commit. If you need CORS access on preview deployments, add a wildcard origin like `https://*-your-project.vercel.app` or add specific preview URLs as needed.
+Deploy `apps/web` to your hosting provider. For Vercel:
 
-#### 4. Invite a collaborator
+1. Create a new Vercel project connected to the repository.
+2. Set the root directory to `apps/web`.
+3. Configure the required environment variables.
 
-Now that you've deployed your Next.js application and Sanity Studio, you can optionally invite a collaborator to your Studio. Open up [Manage](https://www.sanity.io/manage), select your project and click "Invite project members"
+### Configure CORS origins
 
-They will be able to access the deployed Studio, where you can collaborate together on creating content.
+Production web URLs must be added to the Sanity project's CORS origins.
+
+1. Go to [Sanity Manage](https://www.sanity.io/manage), select the project, then open **API** > **CORS origins**.
+2. Add the production URL.
+3. Add any custom domains.
+4. Keep `http://localhost:3000` for local development.
+5. Enable **Allow credentials** for origins that need authenticated requests, such as live preview or visual editing.
+
+For Vercel preview deployments, add specific preview URLs or a wildcard origin for the preview domain pattern.
+
+### Invite collaborators
+
+Open [Sanity Manage](https://www.sanity.io/manage), select the project, then invite project members.

@@ -1,9 +1,19 @@
-# Sanity Clean Content Studio
+# GuideSite Studio
 
-Congratulations, you have now installed the Sanity Content Studio, an open-source real-time content editing environment connected to the Sanity backend.
+Sanity Studio for GuideSite.
 
-Now you can do the following things:
+## Local development
 
-- [Read “getting started” in the docs](https://www.sanity.io/docs/introduction/getting-started?utm_source=readme)
-- [Join the Sanity community](https://www.sanity.io/community/join?utm_source=readme)
-- [Extend and build plugins](https://www.sanity.io/docs/content-studio/extending?utm_source=readme)
+Run the Studio from the repository root:
+
+```shell
+pnpm run dev:studio
+```
+
+Open [http://localhost:3333](http://localhost:3333).
+
+## Schema
+
+Document schemas live in `schemaTypes/documents`.
+
+Shared frontend Sanity utilities live in `../../packages/sanity`.
