@@ -6,6 +6,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Turbo Start Sanity — a pnpm monorepo (Turborepo) with a Next.js 16 frontend and Sanity v5 CMS Studio. Uses Biome/Ultracite for linting/formatting.
 
+## Agent skills
+
+### Issue tracker
+
+Issues live in GitHub Issues for `ovsw/guidesite`. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Use the default five-label triage vocabulary. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Use a single-context domain docs layout. See `docs/agents/domain.md`.
+
 ## Commands
 
 ```bash
